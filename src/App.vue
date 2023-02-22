@@ -1,8 +1,16 @@
 <script setup lang="ts">
 import { ref, type Ref } from 'vue';
+
+interface FormData {
+  email: HTMLInputElement,
+  password: HTMLInputElement
+}
+
 const radios: Ref<{id: string}[]> = ref([]);
 const hasLoggedIn = ref(false);
-const login = async (event: SubmitEvent) => {
+const login = async (event: Event) => {
+  if (!event.target) return;
+  let target = event.target as HTMLFormElement & {elements: FormData}
   await fetch(`${import.meta.env.VITE_APP_BASE_URL}/login`, {
     headers: {
       'content-type': 'application/json',
@@ -10,8 +18,8 @@ const login = async (event: SubmitEvent) => {
     credentials: 'include',
     method: 'POST',
     body: JSON.stringify({
-      email: event.target.elements.email.value,
-      password: event.target.elements.password.value,
+      email: target.elements.email.value,
+      password: target.elements.password.value,
     }),
   });
   hasLoggedIn.value = true;
