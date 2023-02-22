@@ -2,8 +2,7 @@
 import { ref } from 'vue';
 const radios = ref([]);
 const hasLoggedIn = ref(false);
-const login = async (event) => {
-  console.log(event);
+const login = async (event: SubmitEvent) => {
   await fetch(`${import.meta.env.VITE_APP_BASE_URL}/login`, {
     headers: {
       'content-type': 'application/json',
@@ -40,7 +39,7 @@ const getRadios = async () => {
     </form>
     <div v-else>
       You are now logged in
-      <li v-for="radio in radios" :key="radio.id">
+      <li v-for="radio in radios as {id: string}[]" :key="radio.id">
         {{ radio.id }}
       </li>
     </div>
