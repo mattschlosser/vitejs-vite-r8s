@@ -1,3 +1,31 @@
+<script setup lang="ts">
+import { ref } from 'vue';
+const radios = ref([]);
+const hasLoggedIn = ref(false);
+const login = async (event) => {
+  console.log(event);
+  await fetch(`${import.meta.env.VITE_APP_BASE_URL}/login`, {
+    headers: {
+      'content-type': 'application/json',
+    },
+    credentials: 'include',
+    method: 'POST',
+    body: JSON.stringify({
+      email: event.target.elements.email.value,
+      password: event.target.elements.password.value,
+    }),
+  });
+  hasLoggedIn.value = true;
+  await getRadios();
+};
+
+const getRadios = async () => {
+  radios.value = await fetch(`${import.meta.env.VITE_APP_BASE_URL}/radios`, {
+    credentials: 'include',
+    method: 'GET',
+  }).then((e) => e.json());
+};
+</script>
 <template>
   <div id="app">
     <form
@@ -18,45 +46,6 @@
     </div>
   </div>
 </template>
-
-<script>
-export default {
-  name: 'App',
-  data() {
-    return {
-      hasLoggedIn: false,
-      radios: [],
-    };
-  },
-  created() {
-    this.getRadios();
-  },
-  methods: {
-    async getRadios() {
-      this.radios = await fetch(`${import.meta.env.VITE_APP_BASE_URL}/radios`, {
-        credentials: 'include',
-        method: 'GET',
-      }).then((e) => e.json());
-    },
-    async login(event) {
-      console.log(event);
-      await fetch(`${import.meta.env.VITE_APP_BASE_URL}/login`, {
-        headers: {
-          'content-type': 'application/json',
-        },
-        credentials: 'include',
-        method: 'POST',
-        body: JSON.stringify({
-          email: event.target.elements.email.value,
-          password: event.target.elements.password.value,
-        }),
-      });
-      this.hasLoggedIn = true;
-      this.getRadios();
-    },
-  },
-};
-</script>
 
 <style>
 input {
