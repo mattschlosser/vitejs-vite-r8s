@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { ref } from 'vue';
-const radios = ref([]);
+import { ref, type Ref } from 'vue';
+const radios: Ref<{id: string}[]> = ref([]);
 const hasLoggedIn = ref(false);
 const login = async (event: SubmitEvent) => {
   await fetch(`${import.meta.env.VITE_APP_BASE_URL}/login`, {
@@ -39,7 +39,7 @@ const getRadios = async () => {
     </form>
     <div v-else>
       You are now logged in
-      <li v-for="radio in radios as {id: string}[]" :key="radio.id">
+      <li v-for="radio in radios" :key="radio.id">
         {{ radio.id }}
       </li>
     </div>
