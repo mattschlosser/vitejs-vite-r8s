@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, type Ref } from 'vue';
-
+import { getCookie } from "./cookie";
 interface FormData {
   email: HTMLInputElement,
   password: HTMLInputElement
@@ -14,6 +14,7 @@ const login = async (event: Event) => {
   await fetch(`${import.meta.env.VITE_APP_BASE_URL}/login`, {
     headers: {
       'content-type': 'application/json',
+      'X-XSRF-TOKEN': getCookie(`XSRF-TOKEN`)
     },
     credentials: 'include',
     method: 'POST',
