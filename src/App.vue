@@ -17,8 +17,6 @@ const getRadios = async () => {
   }).then((e) => e.json());
 };
 
-// if we successfully got radios, we must be logged in
-getRadios().then((e) => hasLoggedIn.value = true);
 </script>
 <template>
   <div id="app">

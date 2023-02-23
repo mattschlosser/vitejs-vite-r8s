@@ -5,9 +5,24 @@ interface FormData {
 }
 
 import { getCookie } from "../cookie";
-import { ref, type Ref, readonly } from "vue";
+import { ref, type Ref, readonly, onMounted } from "vue";
 export function useAuth() {
     const hasLoggedIn: Ref<boolean> = ref(false);
+
+    /**
+     * Check if the person is logged in
+     */
+    onMounted(async () => {
+        await fetch(`${import.meta.env.VITE_APP_BASE_URL}/check`, {
+            credentials: "include",
+            method: "GET"
+        }).then(async (r) => {
+            if (r.ok) {
+                let result = await r.json()
+                hasLoggedIn.value = result.isLoggedIn
+            }
+        })
+    })
 
     const logout = async () => {
         await fetch(`${import.meta.env.VITE_APP_BASE_URL}/logout`, {
@@ -46,6 +61,6 @@ export function useAuth() {
     return {
         login,
         logout,
-        hasLoggedIn
+        hasLoggedIn: readonly(hasLoggedIn)
     }
 }
