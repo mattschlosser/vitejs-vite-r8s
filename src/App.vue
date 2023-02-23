@@ -1,31 +1,14 @@
 <script setup lang="ts">
-import { ref, type Ref } from 'vue';
-import { getCookie } from "./cookie";
-interface FormData {
-  email: HTMLInputElement,
-  password: HTMLInputElement
-}
+import { ref, watch, type Ref } from 'vue';
+import { useAuth } from "./hooks/useAuth";
+
+const { hasLoggedIn, login, logout } = useAuth()
+
+watch(hasLoggedIn, (val) => {
+  val && getRadios()
+});
 
 const radios: Ref<{id: string}[]> = ref([]);
-const hasLoggedIn = ref(false);
-const login = async (event: Event) => {
-  if (!event.target) return;
-  let target = event.target as HTMLFormElement & {elements: FormData}
-  await fetch(`${import.meta.env.VITE_APP_BASE_URL}/login`, {
-    headers: {
-      'content-type': 'application/json',
-      'X-XSRF-TOKEN': getCookie(`XSRF-TOKEN`)
-    },
-    credentials: 'include',
-    method: 'POST',
-    body: JSON.stringify({
-      email: target.elements.email.value,
-      password: target.elements.password.value,
-    }),
-  });
-  hasLoggedIn.value = true;
-  await getRadios();
-};
 
 const getRadios = async () => {
   radios.value = await fetch(`${import.meta.env.VITE_APP_BASE_URL}/radios`, {
@@ -34,10 +17,12 @@ const getRadios = async () => {
   }).then((e) => e.json());
 };
 
+// if we successfully got radios, we must be logged in
 getRadios().then((e) => hasLoggedIn.value = true);
 </script>
 <template>
   <div id="app">
+    <button v-if="hasLoggedIn" @click="logout">Logout</button>
     <form
       v-if="!hasLoggedIn"
       method="post"
