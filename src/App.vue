@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { ref, watch, type Ref } from 'vue';
+import Login from './pages/Login.vue';
 import { useAuth } from "./hooks/useAuth";
 
-const { hasLoggedIn, login, logout } = useAuth()
+const { hasLoggedIn, logout } = useAuth()
 
 watch(hasLoggedIn, (val) => {
   val && getRadios()
@@ -19,43 +20,24 @@ const getRadios = async () => {
 
 </script>
 <template>
-  <div id="app">
-    <button v-if="hasLoggedIn" @click="logout">Logout</button>
-    <form
-      v-if="!hasLoggedIn"
-      method="post"
-      action="http://localhost:3333/login"
-      @submit.prevent="login"
-    >
-      <input type="email" name="email" placeholder="Username" />
-      <input type="password" name="password" placeholder="Password" />
-      <button>Submit</button>
-    </form>
-    <div v-else>
-      You are now logged in
-      <li v-for="radio in radios" :key="radio.id">
-        {{ radio.id }}
-      </li>
-    </div>
-  </div>
-</template>
+  <v-app>
+    <v-toolbar>
+      <v-spacer></v-spacer>
 
-<style>
-input {
-  padding: 0.6em;
-  display: block;
-  margin: 1em;
-  width: 100%;
-}
-button {
-  width: 100%;
-}
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
+      <v-btn v-if="hasLoggedIn" icon @click="logout">
+        <v-icon>mdi-export</v-icon>
+      </v-btn>
+    </v-toolbar>
+    <v-main>
+      <v-container>
+        <Login v-if="!hasLoggedIn" />
+        <div v-else>
+          You are now logged in
+          <li v-for="radio in radios" :key="radio.id">
+            {{ radio.id }}
+          </li>
+        </div>
+      </v-container>
+    </v-main>
+  </v-app>
+</template>

@@ -6,8 +6,8 @@ interface FormData {
 
 import { getCookie } from "../cookie";
 import { ref, type Ref, readonly, onMounted } from "vue";
+const hasLoggedIn: Ref<boolean> = ref(false);
 export function useAuth() {
-    const hasLoggedIn: Ref<boolean> = ref(false);
 
     /**
      * Check if the person is logged in
@@ -40,9 +40,7 @@ export function useAuth() {
         })
     }
 
-    const login = async (event: Event) => {
-      if (!event.target) return;
-      let target = event.target as HTMLFormElement & {elements: FormData}
+    const login = async (email: string, password: string) => {
       await fetch(`${import.meta.env.VITE_APP_BASE_URL}/login`, {
         headers: {
           'content-type': 'application/json',
@@ -50,10 +48,7 @@ export function useAuth() {
         },
         credentials: 'include',
         method: 'POST',
-        body: JSON.stringify({
-          email: target.elements.email.value,
-          password: target.elements.password.value,
-        }),
+        body: JSON.stringify({ email, password }),
       });
       hasLoggedIn.value = true;
     };
