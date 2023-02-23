@@ -33,6 +33,8 @@ const getRadios = async () => {
     method: 'GET',
   }).then((e) => e.json());
 };
+
+getRadios().then((e) => hasLoggedIn.value = true);
 </script>
 <template>
   <div id="app">
