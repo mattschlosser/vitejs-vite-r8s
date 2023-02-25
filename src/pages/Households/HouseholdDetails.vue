@@ -1,0 +1,3 @@
+<template>
+    Household Details
+</template>

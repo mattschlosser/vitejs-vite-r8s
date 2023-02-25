@@ -1,17 +1,16 @@
 <script setup lang="ts">
-import { useAuth } from './hooks/useAuth';
-
-const { hasLoggedIn, logout } = useAuth()
+import AppToolbar from './components/AppToolbar.vue';
 </script>
 <template>
   <v-app>
-    <v-toolbar>
-      <v-spacer></v-spacer>
-
-      <v-btn v-if="hasLoggedIn" icon @click="logout">
-        <v-icon>mdi-export</v-icon>
-      </v-btn>
-    </v-toolbar>
+    <AppToolbar />
+    <VNavigationDrawer expand-on-hover rail>
+      <v-list>
+        <v-list-item prepend-icon="mdi-home" to="/households">
+          Households
+        </v-list-item>
+      </v-list>
+    </VNavigationDrawer>
     <v-main>
       <v-container>
         <RouterView />
