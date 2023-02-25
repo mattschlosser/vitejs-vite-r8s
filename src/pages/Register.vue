@@ -3,12 +3,10 @@ import { ref, watch } from "vue"
 import { useRouter } from "vue-router";
 import { useAuth } from "../hooks/useAuth";
 
-const { hasLoggedIn, login } = useAuth()
-const r = useRouter();
+const { hasLoggedIn, register } = useAuth()
+const router = useRouter();
 
-watch(hasLoggedIn, (val) => {
-  val && r.push('/')
-})
+watch(hasLoggedIn, val => val && router.push("/"))
 
 const required = (value: string) => {
     return !!value || "Field is required"
@@ -16,14 +14,15 @@ const required = (value: string) => {
 const loading = ref(false)
 const email = ref('');
 const password = ref('');
+const password2 = ref('');
 const form = ref(null)
 const onSubmit = () => {
-    login(email.value, password.value)
+    register(email.value, password.value)
 }
 </script>
 
 <template>
-    <v-card class="cemtered mx-auto px-6 py-8" max-width="344">
+    <v-card class="mx-auto px-6 py-8" max-width="344">
       <v-form
         v-model="form"
         @submit.prevent="onSubmit"
@@ -42,15 +41,28 @@ const onSubmit = () => {
           :readonly="loading"
           :rules="[required]"
           clearable
+          class="mb-2"
           type="password"
+          autocomplete="new-password"
           label="Password"
+          placeholder="Enter your password"
+        ></v-text-field>
+
+        <v-text-field
+          v-model="password2"
+          :readonly="loading"
+          :rules="[required]"
+          clearable
+          type="password"
+          autocomplete="new-password"
+          label="Renter your Password"
           placeholder="Enter your password"
         ></v-text-field>
 
         <br>
 
         <v-btn
-          :disabled="!form"
+          :disabled="!form || password !== password2"
           :loading="loading"
           block
           color="success"
@@ -58,16 +70,11 @@ const onSubmit = () => {
           type="submit"
           variant="elevated"
         >
-          Sign In
+          Register
         </v-btn>
         <div class="mt-3 t-center">
-          Not signed up? <router-link to="/register">Register Now</router-link>
+          Already registered? <router-link to="/login">Log In</router-link>
         </div>
       </v-form>
     </v-card>
 </template>
-<style scoped>
-.centered {
-  text-align: center;
-}
-</style>

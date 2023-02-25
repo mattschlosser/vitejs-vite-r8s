@@ -6,23 +6,43 @@ interface FormData {
 
 import { getCookie } from "../cookie";
 import { ref, type Ref, readonly, onMounted } from "vue";
-const hasLoggedIn: Ref<boolean> = ref(false);
+const hasLoggedIn: Ref<boolean | null> = ref(null);
 export function useAuth() {
 
     /**
      * Check if the person is logged in
      */
     onMounted(async () => {
-        await fetch(`${import.meta.env.VITE_APP_BASE_URL}/check`, {
+        if (hasLoggedIn.value === null) {
+            await fetch(`${import.meta.env.VITE_APP_BASE_URL}/check`, {
+                credentials: "include",
+                method: "GET"
+            }).then(async (r) => {
+                if (r.ok) {
+                    let result = await r.json()
+                    hasLoggedIn.value = result.isLoggedIn
+                }
+            })
+        }
+    })
+
+    const register = async (email: string, password: string) => {
+        await fetch(`${import.meta.env.VITE_APP_BASE_URL}/register`, {
             credentials: "include",
-            method: "GET"
-        }).then(async (r) => {
+            headers: {
+                'content-type': 'application/json',
+                'X-XSRF-TOKEN': getCookie(`XSRF-TOKEN`)
+            },
+            body: JSON.stringify({ email, password }),
+            method: "POST"
+        }).then((r) => {
             if (r.ok) {
-                let result = await r.json()
-                hasLoggedIn.value = result.isLoggedIn
+                hasLoggedIn.value = true;
+            } else {
+                throw r.statusText;
             }
         })
-    })
+    }
 
     const logout = async () => {
         await fetch(`${import.meta.env.VITE_APP_BASE_URL}/logout`, {
@@ -56,6 +76,7 @@ export function useAuth() {
     return {
         login,
         logout,
+        register,
         hasLoggedIn: readonly(hasLoggedIn)
     }
 }
