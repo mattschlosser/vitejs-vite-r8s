@@ -20,7 +20,8 @@ export default createRouter({
         },
         {
             path: "/households/:id",
-            component: () => import("../pages/Households/HouseholdDetails.vue")
+            component: () => import("../pages/Households/HouseholdDetails.vue"),
+            props: true
         }
     ],
     history: createWebHistory()
