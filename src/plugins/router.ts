@@ -22,6 +22,11 @@ export default createRouter({
             path: "/households/:id",
             component: () => import("../pages/Households/HouseholdDetails.vue"),
             props: true
+        },
+        {
+            path: "/households/:id/receipts",
+            component: () => import("../pages/Households/Receipts.vue"),
+            props: true
         }
     ],
     history: createWebHistory()

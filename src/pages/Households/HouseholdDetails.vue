@@ -36,6 +36,10 @@ const onSubmit = () => {
 
     {{  data.name }}
 
+    <div>
+        <VBtn color="primary" :to="`/households/${props.id}/receipts`"> View Receipts </VBtn>
+    </div>
+
     <VDialog v-model="dialogOpen" width="400" max-width="96vw">
         <template #activator="{ props }">
             <VBtn class="mt-3 d-block" color="primary" v-bind="props">Add Member</VBtn>

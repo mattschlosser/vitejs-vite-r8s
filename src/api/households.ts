@@ -5,6 +5,11 @@ export interface Household {
     name: string
 }
 
+export interface User {
+    id: number
+    email: string
+}
+
 export const getHouseholds = async (): Promise<Household[]> =>  await fetch(`${import.meta.env.VITE_APP_BASE_URL}/households`, {
     credentials: "include",
     headers: {
@@ -21,6 +26,21 @@ export const getHouseholds = async (): Promise<Household[]> =>  await fetch(`${i
 })
 
 export const getHousehold = async (id: number) => await fetch(`${import.meta.env.VITE_APP_BASE_URL}/households/${id}`, {
+    credentials: "include",
+    headers: {
+        'content-type': 'application/json',
+        'X-XSRF-TOKEN': getCookie(`XSRF-TOKEN`)
+    },
+    method: "GET"
+}).then((r) => {
+    if (r.ok) {
+        return r.json()
+    } else {
+        throw r.statusText;
+    }
+})
+
+export const getMembers = async (id: number): Promise<User[]> => await fetch(`${import.meta.env.VITE_APP_BASE_URL}/households/${id}/members`, {
     credentials: "include",
     headers: {
         'content-type': 'application/json',
