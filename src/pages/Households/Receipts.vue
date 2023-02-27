@@ -3,6 +3,7 @@ import { getMembers } from '../../api/households';
 import { getReceipts, addReceipt } from "../../api/receipts"
 import { useMutation, useQuery, useQueryClient } from '@tanstack/vue-query';
 import { ref, computed, type Ref } from 'vue';
+import NavBar from './NavBar.vue';
 const props = defineProps<{id: number}>()
 
 const client = useQueryClient()
@@ -82,4 +83,5 @@ const onSubmit = () => {
             {{ receipt.purchased }} {{ receipt.amount }}
         </v-list-item>
     </v-list>
+    <NavBar />
 </template>

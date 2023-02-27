@@ -2,6 +2,7 @@
 import { getHousehold, addMember } from '../../api/households';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/vue-query';
 import { ref, type Ref } from 'vue';
+import NavBar from './NavBar.vue';
 const props = defineProps<{id: number}>()
 
 const client = useQueryClient()
@@ -36,9 +37,6 @@ const onSubmit = () => {
 
     {{  data.name }}
 
-    <div>
-        <VBtn color="primary" :to="`/households/${props.id}/receipts`"> View Receipts </VBtn>
-    </div>
 
     <VDialog v-model="dialogOpen" width="400" max-width="96vw">
         <template #activator="{ props }">
@@ -71,4 +69,5 @@ const onSubmit = () => {
             {{ member.email }}
         </v-list-item>
     </v-list>
+    <NavBar />
 </template>
