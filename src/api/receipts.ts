@@ -1,6 +1,19 @@
 import { getCookie } from "../cookie";
 
-export const getReceipts = async (id: number) => await fetch(`${import.meta.env.VITE_APP_BASE_URL}/households/${id}/receipts`, {
+interface User {
+    id: number,
+    email: string
+}
+interface Receipt {
+    id: number,
+    purchased_by: number,
+    purchasedByUser: User,
+    purchased: string,
+    amount: number,
+    shop: string
+}
+
+export const getReceipts = async (id: number): Promise<Receipt[]> => await fetch(`${import.meta.env.VITE_APP_BASE_URL}/households/${id}/receipts`, {
     credentials: "include",
     headers: {
         'content-type': 'application/json',
