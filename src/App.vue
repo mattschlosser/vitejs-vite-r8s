@@ -1,13 +1,15 @@
 <script setup lang="ts">
 import { useAuth } from './hooks/useAuth';
 import { ref, type Ref } from "vue"
+import { useDisplay } from 'vuetify/lib/framework.mjs';
 const drawer: Ref<boolean | null>  = ref(null)
 const { hasLoggedIn, logout } = useAuth()
+const { mobile } = useDisplay();
 </script>
 <template>
   <v-app>
     <v-app-bar flat color="#ffeecc">
-        <VAppBarNavIcon @click.stop="drawer = !drawer" />
+        <VAppBarNavIcon v-if="hasLoggedIn" @click.stop="drawer = !drawer" />
         <v-toolbar-title >
             Roomm8s
         </v-toolbar-title>
@@ -16,7 +18,7 @@ const { hasLoggedIn, logout } = useAuth()
           <v-icon>mdi-export</v-icon>
         </v-btn>
     </v-app-bar>
-    <VNavigationDrawer v-model="drawer" expand-on-hover rail>
+    <VNavigationDrawer v-if="hasLoggedIn" v-model="drawer" expand-on-hover :rail="!mobile">
       <v-list>
         <v-list-item prepend-icon="mdi-home" to="/households">
           Households
