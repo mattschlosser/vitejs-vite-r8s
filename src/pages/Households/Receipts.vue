@@ -37,7 +37,7 @@ const purchasedBy: Ref<number> = ref(0)
 
 const friendlyTime = (time: string): string => {
     let formatter = new Intl.DateTimeFormat('en-CA', {
-        dateStyle: 'medium'
+        dateStyle: 'medium', timeZone: 'UTC'
     });
     return formatter.format(new Date(time));
 }
