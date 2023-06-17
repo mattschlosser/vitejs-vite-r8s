@@ -78,8 +78,8 @@ const totals = computed(() => {
 </script>
 <template>
     <div style="position: relative;">
-        <div class="d-flex justify-space-around">
-            <div v-for="total in totals">
+        <div class="d-flex justify-space-around flex-column flex-md-row">
+            <div v-for="total in totals" class="mb-3 mb-md-0">
                 <div class="text-h4">
                     ${{ total.amount }}
                 </div>
